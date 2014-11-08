@@ -1,0 +1,22 @@
+{
+    "name": "My first game",
+    "images": [
+        ["kotek", "/img/cat.png"],
+        ["czarownica", "/img/witch.png"]        
+    ],
+    "levels": [
+        {
+            "name": "pierwsza plansza",
+            "objects": [
+                {"type": "kotek", "x": 10, "y": 10, "vx":100 }, 
+                {"x": 600, "y": 200, "type": "kotek", "vy": 40}, 
+                {"x": 100, "y": 200, "type": "kotek"},
+                {"x": 550, "y": 300, "type": "kotek"},
+                {"type": "czarownica", 
+                "x": 550, "y": 250, 
+                "vx":-147, "mass":2, "kinematic": 1 }                                                                                                                  
+            ]
+        },
+        {"name": "druga plansza"}      
+    ]
+}

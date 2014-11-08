@@ -1,0 +1,28 @@
+{
+  "name": "phaser-loader",
+  "version": "0.0.0",
+  "description": "Loads game objects, images and levels from JSON",
+  "main": "phaser-loader.js",
+  "scripts": {
+    "test": "python -m SimpleHTTPServer & google-chrome http://localhost:8000"
+  },
+  "keywords": [
+    "game",
+    "phaser",
+    "loader",
+    "levels",
+    "json",
+    "map",
+    "objects",
+    "sprites",
+    "preloader"
+  ],
+  "author": {
+    "name": "Łukasz Lityński"
+  },
+  "license": "MIT",
+  "readme": "ERROR: No README data found!",
+  "_id": "phaser-loader@0.0.0",
+  "_shasum": "c18aec9f3f7302fdd8b7fa3a93ff725ec4066fee",
+  "_from": "phaser-loader@"
+}

@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+<script src="/third-party/phaser.js"></script>
+<script src="/phaser-loader.js"></script>
+<script src="/hex13.js"></script>
+<script src="/entities/kotek/register.js"></script>
+<script src="/entities/czarownica/register.js"></script>
+<style>
+    #game {
+        background-color: black;
+    }
+</style>
+
+</head>
+<body>
+<div id="game"></div>
+
+
+<script>
+// This file is demo of the use of phaser-loader.
+// In further versions there will be some different api,this project is not stable for now.
+
+
+
+function onCollision (sprite) {
+    sprite.body.velocity.x *= -1;
+    sprite.body.velocity.y *= -1;
+}
+
+function wrapBody (body) {
+    var sprite = body.sprite;
+    return {
+        kill: function () {
+            sprite.kill();
+        },
+        body: body        
+    }
+}
+
+// --------
+
+
+var log = console.log.bind(console);
+var PHYSICS = Phaser.Physics.P2JS;
+
+var waterLevel = 300;
+var GAME_W = 700;
+var GAME_H = 600;
+var game, entities;
+
+
+
+var waters = [];
+function drawWater(game) {
+    if (waters.length > 1) {
+        var previousWater = waters.shift();
+        if (previousWater) {
+            previousWater.parent.remove(previousWater);
+        }
+    }
+    var water = game.add.graphics();
+    var rand = Math.random;
+    var r = 10;
+    var g = 100;
+    var b = 160;
+    
+    for (var i = 0; i < 20; i++) {
+        water.beginFill((r<<16) | (g<<8) | b);              
+        //water.drawCircle(rand() * GAME_W, waterLevel + rand()*400, rand()*40 +34);
+        water.drawRect(0,waterLevel + i * 20, 700, 20);
+        water.endFill();            
+    }
+    water.alpha = 0.3;
+    
+    waters.push(water);
+}
+
+
+
+$.getJSON('/game.json', function (gamedata) {
+    var images = gamedata.images;
+    var handlers = {
+        preload: function () {
+            phaserLoader.loadImages(game, gamedata);
+        },
+        
+        create: function () {
+            entities = phaserLoader.entities;
+            phaserLoader.initPhysics(game, PHYSICS);
+            phaserLoader.loadLevel(gamedata, 0);
+            game.input.onDown.add(click, this);            
+            drawWater(game);            
+        },
+        update: function () {
+            drawWater(game);            
+            entities.forEach(function (entity) {
+                var body = entity.body;
+
+                if (body) {
+                    if (body.y > waterLevel) {
+                        var factor = (body.y - waterLevel)/ 60;                    
+                        if (body.y < waterLevel + 90) {
+                            body.velocity.y -= 7;
+                        }
+
+                        body.angularVelocity *= 0.967;
+                        body.velocity.x *= 0.96;
+                        body.velocity.y *= 0.96;                        
+                        
+                    }
+                }
+            });
+        },        
+    };
+    
+    game = phaserLoader.createGame(GAME_W, GAME_H, Phaser.CANVAS, 'game', handlers);
+});
+
+function click (pointer) {
+    var x = pointer.position.x;
+    var y = pointer.position.y;    
+    var o = {
+        type: 'kotek', x: x, y:y, vx:0, vy:1, mass: 3
+    }
+    phaserLoader.createEntity(o);
+}
+</script>
+
+
+</body>
+</html>
